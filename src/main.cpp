@@ -86,6 +86,10 @@ void RandomAgentGenerator(int n, int rangl=0, int rangr=RES) {
     }
 }
 
+void draw(Vector2 pos,int val,SDL_Texture* tex, unsigned char* pixels, int pitch) {
+    pixels[(int)pos.x+(int)pos.y*RES] = val;
+}
+
 int main()
 {
     SDL_Window* window = NULL;
@@ -101,28 +105,31 @@ int main()
         SDL_Texture* texture = SDL_CreateTexture( renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, RES, RES);
         unsigned char* pixels;
         int pitch;
-        SDL_LockTexture( texture, NULL, (void**)&pixels, &pitch );
-        for(int i = 0; i < pitch * RES; i++) pixels[i] = 255;
-        SDL_UnlockTexture( texture );
         SDL_SetRenderTarget( renderer, texture );
 
-
-        RandomAgentGenerator(50000,0,RES);
+        RandomAgentGenerator(1000,0,RES);
 
         SDL_Event event;
         while(!quit) {
             while( SDL_PollEvent( &event ) != 0) {
                 if( event.type == SDL_QUIT ) quit=true;
             }
-            SDL_SetRenderDrawColor(renderer,0,0,0,255);
-            SDL_RenderClear(renderer);
+            // SDL_SetRenderDrawColor(renderer,0,0,0,255);
+            // SDL_RenderClear(renderer);
 
-            for(int k=0; k<Agents.size(); ++k) {
-                UpdateData(renderer,Agents[k]);
-            }
+            SDL_LockTexture( texture, NULL, (void**)&pixels, &pitch );
+            // for(int i = 0; i < pitch * RES; i++) if(pixels[i]>0) pixels[i]=255;
+            SDL_UnlockTexture( texture );
+            SDL_RenderCopy(renderer,texture,NULL,NULL);
+
+            // for(int k=0; k<Agents.size(); ++k)
+            //     UpdateData(renderer,Agents[k]);
+
 
             SDL_RenderPresent(renderer);
         }
+        SDL_DestroyTexture( texture );
+        texture = NULL;
     }
     SDL_DestroyWindow(window);
     SDL_Quit();
