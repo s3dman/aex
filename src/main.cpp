@@ -105,7 +105,7 @@ int main()
         SDL_Texture* texture = SDL_CreateTexture( renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, RES, RES);
         unsigned char* pixels;
         int pitch;
-        SDL_SetRenderTarget( renderer, texture );
+        // SDL_SetRenderTarget( renderer, texture );
 
         RandomAgentGenerator(1000,0,RES);
 
@@ -114,16 +114,16 @@ int main()
             while( SDL_PollEvent( &event ) != 0) {
                 if( event.type == SDL_QUIT ) quit=true;
             }
-            // SDL_SetRenderDrawColor(renderer,0,0,0,255);
-            // SDL_RenderClear(renderer);
+            SDL_SetRenderDrawColor(renderer,0,0,0,255);
+            SDL_RenderClear(renderer);
 
-            SDL_LockTexture( texture, NULL, (void**)&pixels, &pitch );
+            // SDL_LockTexture( texture, NULL, (void**)&pixels, &pitch );
             // for(int i = 0; i < pitch * RES; i++) if(pixels[i]>0) pixels[i]=255;
-            SDL_UnlockTexture( texture );
-            SDL_RenderCopy(renderer,texture,NULL,NULL);
+            // SDL_UnlockTexture( texture );
+            // SDL_RenderCopy(renderer,texture,NULL,NULL);
 
-            // for(int k=0; k<Agents.size(); ++k)
-            //     UpdateData(renderer,Agents[k]);
+            for(int k=0; k<Agents.size(); ++k)
+                UpdateData(renderer,Agents[k]);
 
 
             SDL_RenderPresent(renderer);
